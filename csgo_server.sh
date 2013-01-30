@@ -101,7 +101,7 @@ cd /etc/init.d
 wget https://raw.github.com/pmrowla/srcds-service/master/srcds.sh
 chmod +x srcds.sh
 sed -i -e "s/^SRCDS_USER=.*$/SRCDS_USER=\"$SRCDS_USER\"/" srcds.sh
-sed -i -e "s/^DIR=.*$/DIR=\"$CSGO_DIR\"/" srcds.sh
+sed -i -e "s|^DIR=.*$|DIR=\"$CSGO_DIR\"|" srcds.sh
 sed -i -e "s/^PARAMS=.*$/PARAMS=\"-game csgo\"/" srcds.sh
 
 restart_services
