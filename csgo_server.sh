@@ -14,12 +14,7 @@
 # <UDF name="srcds_user" label="The name for the srcds user" default="srcds" />
 # <UDF name="sshd_permitrootlogin" label="Permit SSH root login" oneof="No,Yes" default="No">
 
-set -e
-set -u
-
 USER_GROUPS=sudo
-
-exec &> /root/stackscript.log
 
 source <ssinclude StackScriptID=1> # StackScript Bash Library
 source <ssinclude StackScriptID=123> # lib-system-ubuntu
@@ -98,11 +93,11 @@ chown -R $SRCDS_USER:$SRCDS_USER $SRCDS_HOME
 
 # Set up the init script
 cd /etc/init.d
-wget https://raw.github.com/pmrowla/srcds-service/master/srcds.sh
-chmod +x srcds.sh
-sed -i -e "s/^SRCDS_USER=.*$/SRCDS_USER=\"$SRCDS_USER\"/" srcds.sh
-sed -i -e "s|^DIR=.*$|DIR=\"$CSGO_DIR\"|" srcds.sh
-sed -i -e "s/^PARAMS=.*$/PARAMS=\"-game csgo\"/" srcds.sh
+wget https://raw.github.com/pmrowla/srcds-service/master/srcds.sh -O srcds
+chmod +x srcds
+sed -i -e "s/^SRCDS_USER=.*$/SRCDS_USER=\"$SRCDS_USER\"/" srcds
+sed -i -e "s|^DIR=.*$|DIR=\"$CSGO_DIR\"|" srcds
+sed -i -e "s/^PARAMS=.*$/PARAMS=\"-game csgo\"/" srcds
 
 restart_services
 restart_initd_services
