@@ -56,7 +56,7 @@ aptitude -y install byobu tmux
 
 # Configure the srcds user
 SRCDS_HOME=/opt/srcds
-system_add_system_user "$SRCDS_USER" "$SRCDS_HOME"
+system_add_system_user "$SRCDS_USER" "$SRCDS_HOME" ""
 
 # Install srcds
 STEAMCMD_DIR=$SRCDS_HOME/steamcmd
