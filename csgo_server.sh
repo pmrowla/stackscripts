@@ -94,6 +94,14 @@ chmod u+x update.sh
 chmod u+w packagecache
 sudo -u $SRCDS_USER ./update.sh $CSGO_DIR/csgo --snapshot-dev --install --dontask --fixpermissions
 
+# Set up the init script
+cd /etc/init.d
+wget https://raw.github.com/pmrowla/srcds-service/master/srcds.sh
+chmod +x srcds.sh
+sed -i -e "s/^SRCDS_USER=.*$/SRCDS_USER=\"$SRCDS_USER\"/" srcds.sh
+sed -i -e "s/^DIR=.*$/DIR=\"$CSGO_DIR\"/" srcds.sh
+sed -i -e "s/^PARAMS=.*$/DIR=\"-game csgo\"/" srcds.sh
+
 restart_services
 restart_initd_services
 
@@ -102,6 +110,8 @@ cat > ~/setup_message <<EOD
 Hi,
 
 Your Linode VPS configuration is completed.
+
+You will need to update /etc/init.d/srcds.sh with your server parameters.
 
 EOD
 
