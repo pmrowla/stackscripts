@@ -30,6 +30,8 @@ system_update_hostname "$HOSTNAME"
 echo $(system_primary_ip) $HOSTNAME $FQDN >> /etc/hosts
 touch /tmp/restart-hostname
 
+aptitude -y install mailutils
+
 # Create main user
 system_add_user "$USER_NAME" "$USER_PASSWORD" "$USER_GROUPS" "$USER_SHELL"
 
@@ -61,20 +63,20 @@ system_add_system_user "$SRCDS_USER" "$SRCDS_HOME" ""
 # Install srcds
 STEAMCMD_DIR=$SRCDS_HOME/steamcmd
 CSGO_DIR=$SRCDS_HOME/csgo-ds
-sudo -u $SRCDS_USER mkdir -p $STEAMCMD_DIR
-sudo -u $SRCDS_USER mkdir -p $CSGO_DIR
+mkdir -p $STEAMCMD_DIR
+mkdir -p $CSGO_DIR
 cd $SRCDS_HOME/steamcmd
-sudo -u $SRCDS_USER wget http://blog.counter-strike.net/wp-content/uploads/2012/04/steamcmd.tar.gz
-sudo -u $SRCDS_USER tar zxvf steamcmd.tar.gz
+wget http://blog.counter-strike.net/wp-content/uploads/2012/04/steamcmd.tar.gz
+tar zxvf steamcmd.tar.gz
 rm steamcmd.tar.gz
-sudo -u $SRCDS_USER STEAMEXE=steamcmd ./steam.sh +login anonymous +force_install_dir $CSGO_DIR +app_update 740 validate
+STEAMEXE=steamcmd ./steam.sh +login anonymous +force_install_dir $CSGO_DIR +app_update 740 validate
 
 # Install metamod
 cd $CSGO_DIR/csgo
-sudo -u $SRCDS_USER wget http://www.metamodsource.net/mmsdrop/1.10/mmsource-1.10.0-hg816-linux.tar.gz
-sudo -u $SRCDS_USER tar zxvf mmsource-1.10.0-*-linux.tar.gz
+wget http://www.metamodsource.net/mmsdrop/1.10/mmsource-1.10.0-hg816-linux.tar.gz
+tar zxvf mmsource-1.10.0-*-linux.tar.gz
 rm mmsource-1.10.0-*-linux.tar.gz
-sudo -u $SRCDS_USER cat > addons/metamod.vdf <<EOD
+cat > addons/metamod.vdf <<EOD
 "Plugin"
 {
     "file"  "../csgo/addons/metamod/bin/server"
@@ -88,11 +90,13 @@ wget https://github.com/bcserv/sourcemod-updater/archive/master.zip -O sourcemod
 unzip sourcemod-updater.zip
 rm sourcemod-updater.zip
 mv sourcemod-updater-master sourcemod-updater
-chown -R $SRCDS_USER:$SRCDS_USER sourcemod-updater
 cd sourcemod-updater
 chmod u+x update.sh
 chmod u+w packagecache
-sudo -u $SRCDS_USER ./update.sh $CSGO_DIR/csgo --snapshot-dev --install --dontask --fixpermissions
+./update.sh $CSGO_DIR/csgo --snapshot-dev --install --dontask
+
+# Fix permissions on all the srcds stuff
+chown -R $SRCDS_USER:$SRCDS_USER $SRCDS_HOME
 
 # Set up the init script
 cd /etc/init.d
