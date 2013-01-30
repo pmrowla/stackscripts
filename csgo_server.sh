@@ -61,7 +61,7 @@ system_add_system_user "$SRCDS_USER" "$SRCDS_HOME" ""
 # Install srcds
 STEAMCMD_DIR=$SRCDS_HOME/steamcmd
 CSGO_DIR=$SRCDS_HOME/csgo-ds
-sudo -u $SRCDS_USER mkdir -p $STEAMCD_DIR
+sudo -u $SRCDS_USER mkdir -p $STEAMCMD_DIR
 sudo -u $SRCDS_USER mkdir -p $CSGO_DIR
 cd $SRCDS_HOME/steamcmd
 sudo -u $SRCDS_USER wget http://blog.counter-strike.net/wp-content/uploads/2012/04/steamcmd.tar.gz
