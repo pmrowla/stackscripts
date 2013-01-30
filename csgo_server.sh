@@ -28,9 +28,6 @@ source <ssinclude StackScriptID=123> # lib-system-ubuntu
 system_update
 system_update_hostname "$HOSTNAME"
 echo $(system_primary_ip) $HOSTNAME $FQDN >> /etc/hosts
-touch /tmp/restart-hostname
-
-aptitude -y install mailutils
 
 # Create main user
 system_add_user "$USER_NAME" "$USER_PASSWORD" "$USER_GROUPS" "$USER_SHELL"
@@ -40,6 +37,7 @@ system_sshd_permitrootlogin "$SSHD_PERMITROOTLOGIN"
 
 # Install postfix
 postfix_install_loopback_only
+aptitude -y install mailutils
 
 # Install logcheck
 system_security_logcheck
@@ -69,7 +67,7 @@ cd $SRCDS_HOME/steamcmd
 wget http://blog.counter-strike.net/wp-content/uploads/2012/04/steamcmd.tar.gz
 tar zxvf steamcmd.tar.gz
 rm steamcmd.tar.gz
-STEAMEXE=steamcmd ./steam.sh +login anonymous +force_install_dir $CSGO_DIR +app_update 740 validate
+STEAMEXE=steamcmd ./steam.sh +login anonymous +force_install_dir $CSGO_DIR +app_update 740 validate +exit
 
 # Install metamod
 cd $CSGO_DIR/csgo
@@ -104,7 +102,7 @@ wget https://raw.github.com/pmrowla/srcds-service/master/srcds.sh
 chmod +x srcds.sh
 sed -i -e "s/^SRCDS_USER=.*$/SRCDS_USER=\"$SRCDS_USER\"/" srcds.sh
 sed -i -e "s/^DIR=.*$/DIR=\"$CSGO_DIR\"/" srcds.sh
-sed -i -e "s/^PARAMS=.*$/DIR=\"-game csgo\"/" srcds.sh
+sed -i -e "s/^PARAMS=.*$/PARAMS=\"-game csgo\"/" srcds.sh
 
 restart_services
 restart_initd_services
