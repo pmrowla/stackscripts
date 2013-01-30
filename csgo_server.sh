@@ -93,7 +93,7 @@ chown -R $SRCDS_USER:$SRCDS_USER $SRCDS_HOME
 
 # Set up the init script
 cd /etc/init.d
-wget https://raw.github.com/pmrowla/srcds-service/master/srcds.sh -O srcds
+wget https://raw.github.com/pmrowla/srcds-service/master/srcds
 chmod +x srcds
 sed -i -e "s/^SRCDS_USER=.*$/SRCDS_USER=\"$SRCDS_USER\"/" srcds
 sed -i -e "s|^DIR=.*$|DIR=\"$CSGO_DIR\"|" srcds
